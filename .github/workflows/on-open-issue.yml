@@ -1,9 +1,5 @@
-name: "Edit labeled issue's project fields"
+name: "Edit opened issue's project fields"
 on:
-  issues:
-    types:
-      - labeled
-      - unlabeled
   workflow_call:  # rende workflow riusabile
 
 permissions:
@@ -21,7 +17,7 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v6
         with:
-          repository: GlitchHub-Team/GlitchHub-Team.github.io
+          repository: GlitchHub-Team/actions
 
       - name: Setup Python
         uses: actions/setup-python@v6
@@ -30,7 +26,7 @@ jobs:
           cache: 'pip'
 
       - name: Install deps
-        run: pip install -r ./automation/issue-action/requirements.txt
+        run: pip install -r ./issue-action/requirements.txt
 
       - name: Execute Script
         env:
@@ -38,4 +34,4 @@ jobs:
           REPO:           "${{ github.repository }}"
           ISSUE_NUMBER:   "${{ github.event.issue.number }}"
           ISSUE_NODE_ID:  "${{ github.event.issue.node_id }}"
-        run: python ./automation/issue-action $PROJECT "$REPO/$ISSUE_NUMBER" $ISSUE_NODE_ID --role
+        run: python ./issue-action $PROJECT "$REPO/$ISSUE_NUMBER" $ISSUE_NODE_ID --role --iteration
