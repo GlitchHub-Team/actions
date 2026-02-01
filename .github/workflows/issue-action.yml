@@ -12,13 +12,10 @@ on:
         description: The GitHub project to consider in the form "ORGANIZATION/NUMBER"
         required: true
       
-
 permissions:
   contents: read  # non so se serva
   issues: write
   repository-projects: write
-
-
 
 jobs:
   edit_issue:
