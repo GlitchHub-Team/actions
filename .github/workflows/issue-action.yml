@@ -18,14 +18,16 @@ permissions:
   issues: write
   repository-projects: write
 
-env:
-  GH_TOKEN: ${{ secrets.PROJECT_ACCESS_TOKEN }}
-  REPO:           "${{ github.repository }}"
-  ISSUE_NUMBER:   "${{ github.event.issue.number }}"
-  ISSUE_NODE_ID:  "${{ github.event.issue.node_id }}"
+
 
 jobs:
   edit_issue:
+    env:
+      GH_TOKEN:       ${{ secrets.PROJECT_ACCESS_TOKEN }}
+      REPO:           "${{ github.repository }}"
+      ISSUE_NUMBER:   "${{ github.event.issue.number }}"
+      ISSUE_NODE_ID:  "${{ github.event.issue.node_id }}"
+      
     runs-on: self-hosted
     steps:
       - name: Checkout repository
@@ -44,8 +46,8 @@ jobs:
 
       - name: Execute script (opened issue)
         if: inputs.issue-event == 'open'
-        run: python ./issue-action ${{ github.event.inputs.project }} "$REPO/$ISSUE_NUMBER" $ISSUE_NODE_ID --role --iteration
+        run: python ./issue-action ${{ inputs.project }} "$REPO/$ISSUE_NUMBER" $ISSUE_NODE_ID --role --iteration
 
       - name: Execute script (labeled issue)
         if: inputs.issue-event == 'label'
-        run: python ./issue-action ${{ github.event.inputs.project }} "$REPO/$ISSUE_NUMBER" $ISSUE_NODE_ID --role 
+        run: python ./issue-action ${{ inputs.project }} "$REPO/$ISSUE_NUMBER" $ISSUE_NODE_ID --role 
