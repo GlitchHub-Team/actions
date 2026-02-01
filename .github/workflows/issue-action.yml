@@ -1,0 +1,51 @@
+name: "Edit issue project fields"
+on:
+  workflow_call:  # rende workflow riusabile
+    inputs:
+      issue-event:
+        type: string
+        description: Either 'label' or 'open'
+        required: true
+
+      project:  
+        type: string
+        description: The GitHub project to consider in the form "ORGANIZATION/NUMBER"
+        required: true
+      
+
+permissions:
+  contents: read  # non so se serva
+  issues: write
+  repository-projects: write
+
+env:
+  GH_TOKEN: ${{ secrets.PROJECT_ACCESS_TOKEN }}
+  REPO:           "${{ github.repository }}"
+  ISSUE_NUMBER:   "${{ github.event.issue.number }}"
+  ISSUE_NODE_ID:  "${{ github.event.issue.node_id }}"
+
+jobs:
+  edit_issue:
+    runs-on: self-hosted
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v6
+        with:
+          repository: GlitchHub-Team/actions
+
+      - name: Setup Python
+        uses: actions/setup-python@v6
+        with:
+          python-version: '3.13'
+          cache: 'pip'
+
+      - name: Install deps
+        run: pip install -r ./issue-action/requirements.txt
+
+      - name: Execute script (opened issue)
+        if: github.event.inputs.issue-event == 'open'
+        run: python ./issue-action ${{ github.event.inputs.project }} "$REPO/$ISSUE_NUMBER" $ISSUE_NODE_ID --role --iteration
+
+      - name: Execute script (labeled issue)
+        if: github.event.inputs.issue-event == 'label'
+        run: python ./issue-action ${{ github.event.inputs.project }} "$REPO/$ISSUE_NUMBER" $ISSUE_NODE_ID --role 
