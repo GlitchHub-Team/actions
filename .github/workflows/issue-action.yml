@@ -43,9 +43,9 @@ jobs:
         run: pip install -r ./issue-action/requirements.txt
 
       - name: Execute script (opened issue)
-        if: github.event.inputs.issue-event == 'open'
+        if: inputs.issue-event == 'open'
         run: python ./issue-action ${{ github.event.inputs.project }} "$REPO/$ISSUE_NUMBER" $ISSUE_NODE_ID --role --iteration
 
       - name: Execute script (labeled issue)
-        if: github.event.inputs.issue-event == 'label'
+        if: inputs.issue-event == 'label'
         run: python ./issue-action ${{ github.event.inputs.project }} "$REPO/$ISSUE_NUMBER" $ISSUE_NODE_ID --role 
