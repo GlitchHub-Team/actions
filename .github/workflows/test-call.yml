@@ -9,5 +9,9 @@ env:
 
 jobs:
   test-call:
+    permissions:
+      contents: write
+      issues: write
+      pull-requests: write
     uses: ./.github/workflows/branch-action.yml
     #secrets: inherit
