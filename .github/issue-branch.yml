@@ -1,0 +1,4 @@
+# Usiamo solo variabili che l'action "vede" certamente
+branchName: '${issue.number}-${issue.title}'
+# silent: true evita il crash del commento se i permessi sono limitati
+silent: true

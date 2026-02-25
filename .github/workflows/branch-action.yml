@@ -8,27 +8,8 @@ jobs:
     permissions:
       contents: write
       issues: write
-      pull-requests: write
-    
-    if: contains(github.event.issue.title, '[') && contains(github.event.issue.title, ']')
     steps:
       - name: Create issue branch
         uses: robvanderleek/create-issue-branch@main
-        with:
-          # Passiamo la configurazione come stringa JSON
-          # Questo bypassa la lettura del file .github/issue-branch.yml
-          configuration: >
-            {
-              "branchName": "${scope}-${issue.number}-${issue.title}",
-              "variables": [
-                {
-                  "name": "scope",
-                  "source": "title",
-                  "regex": "\\[(.+?)\\]",
-                  "defaultValue": "no-scope"
-                }
-              ],
-              "silent": true
-            }
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
