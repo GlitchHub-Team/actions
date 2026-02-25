@@ -1,6 +1,10 @@
 name: Create branch on issue assignment
 on:
   workflow_call: #rende workflow riusabile
+    secrets:
+      PROJECT_ACCESS_TOKEN:
+        description: 'Token di accesso al repository'
+        required: true
 
 jobs:
   create_branch:
@@ -12,17 +16,3 @@ jobs:
         uses: robvanderleek/create-issue-branch@main
         env:
           GITHUB_TOKEN: ${{ secrets.PROJECT_ACCESS_TOKEN }}
-        with:
-          configuration: |
-            {
-              "branchName": "${scope}-${issue.number}-${issue.title}",
-              "variables": [
-                {
-                  "name": "scope",
-                  "source": "title",
-                  "regex": "^\\[(.+?)\\].*",
-                  "defaultValue": "no-scope" 
-                }
-              ],
-              "silent": true
-            }

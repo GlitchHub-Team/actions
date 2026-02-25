@@ -1,0 +1,8 @@
+# Configurazione centrale per GlitchHub-Team
+branchName: '${scope}-${issue.number}-${issue.title}'
+variables:
+  - name: scope
+    source: title
+    regex: '^\[(.+?)\].*'
+    defaultValue: 'no-scope'
+silent: true
