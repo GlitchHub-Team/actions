@@ -1,8 +1,8 @@
-# Configurazione centrale per GlitchHub-Team
 branchName: '${scope}-${issue.number}-${issue.title}'
 variables:
   - name: scope
     source: title
-    regex: '^\[(.+?)\].*'
+    # Questa regex cerca qualsiasi cosa dentro le quadre, ovunque siano nel titolo
+    regex: '\[(?<scope>.*?)\]' 
     defaultValue: 'no-scope'
-silent: false
+silent: false # IMPORTANTE: mettilo a false per vedere il debug nei log
