@@ -1,8 +1,5 @@
-branchName: '${scope}-${issue.number}-${issue.title}'
-variables:
-  - name: scope
-    source: title
-    # La parte (?<scope>...) dice esplicitamente: "Metti questo match in scope"
-    regex: '\[(?<scope>.+?)\]'
-    defaultValue: 'no-scope'
+# Non usiamo più ${scope} perché l'Action non lo vede
+# Usiamo direttamente il titolo, che l'Action pulirà in automatico
+branchName: '#{issue.number}-${issue.title}'
+# Riduciamo al minimo la configurazione
 silent: false

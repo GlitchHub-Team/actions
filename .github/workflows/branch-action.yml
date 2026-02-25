@@ -1,20 +1,23 @@
-name: Create branch on issue assignment
-on:
-  workflow_call:
-
 jobs:
   create_branch:
     runs-on: self-hosted
-    # Aggiungiamo i permessi espliciti per il GITHUB_TOKEN predefinito
-    permissions:
-      contents: write
-      issues: write
-      pull-requests: write
-    
-    if: contains(github.event.issue.title, '[') && contains(github.event.issue.title, ']')
+    outputs:
+      extracted_scope: ${{ steps.regex.outputs.scope }}
     steps:
+      - name: Extract Scope
+        id: regex
+        shell: python
+        run: |
+          import re, os
+          title = """${{ github.event.issue.title }}"""
+          match = re.search(r'\[(.+?)\]', title)
+          scope = match.group(1).lower() if match else "no-scope"
+          # Rimuove spazi e caratteri speciali dallo scope
+          clean_scope = re.sub(r'[^a-z0-9]', '', scope)
+          with open(os.environ['GITHUB_OUTPUT'], 'a') as f:
+              f.write(f"scope={clean_scope}\n")
+
       - name: Create issue branch
         uses: robvanderleek/create-issue-branch@main
         env:
-          # Usiamo il token generato automaticamente da GitHub
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
