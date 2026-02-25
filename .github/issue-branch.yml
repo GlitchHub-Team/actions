@@ -1,3 +1,0 @@
-# .github/issue-branch.yml
-branchName: '${issue.number}${issue.title}'
-silent: true
