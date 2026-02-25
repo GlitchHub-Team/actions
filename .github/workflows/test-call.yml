@@ -4,6 +4,9 @@ on:
   issues:
     types: [assigned]
 
+env:
+  GH_TOKEN: ${{ secrets.PROJECT_ACCESS_TOKEN }}
+
 jobs:
   test-call:
     uses: ./.github/workflows/branch-action.yml
