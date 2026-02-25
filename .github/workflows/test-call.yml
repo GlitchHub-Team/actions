@@ -10,4 +10,4 @@ env:
 jobs:
   test-call:
     uses: ./.github/workflows/branch-action.yml
-    secrets: inherit
+    #secrets: inherit

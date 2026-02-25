@@ -1,14 +1,20 @@
 name: Create branch on issue assignment
 on:
-  workflow_call: #rende workflow riusabile
+  workflow_call:
 
 jobs:
   create_branch:
     runs-on: self-hosted
-    # Non parte se manca la dicitura [] (il documento di riferimento della issue) nel titolo dell'issue 
+    # Aggiungiamo i permessi espliciti per il GITHUB_TOKEN predefinito
+    permissions:
+      contents: write
+      issues: write
+      pull-requests: write
+    
     if: contains(github.event.issue.title, '[') && contains(github.event.issue.title, ']')
     steps:
       - name: Create issue branch
         uses: robvanderleek/create-issue-branch@main
         env:
-          GITHUB_TOKEN: ${{ secrets.PROJECT_ACCESS_TOKEN }}
+          # Usiamo il token generato automaticamente da GitHub
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
