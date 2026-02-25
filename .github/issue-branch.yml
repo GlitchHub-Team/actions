@@ -5,4 +5,4 @@ variables:
     source: title
     regex: '^\[(.+?)\].*'
     defaultValue: 'no-scope'
-silent: true
+silent: false
