@@ -1,10 +1,6 @@
 name: Create branch on issue assignment
 on:
   workflow_call: #rende workflow riusabile
-    secrets:
-      PROJECT_ACCESS_TOKEN:
-        description: 'Token di accesso al repository'
-        required: true
 
 jobs:
   create_branch:
