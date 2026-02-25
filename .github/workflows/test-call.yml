@@ -1,0 +1,10 @@
+name: Test Recall Local
+
+on:
+  issues:
+    types: [assigned]
+
+jobs:
+  test-call:
+    uses: ./.github/workflows/issue-action.yml
+    secrets: inherit

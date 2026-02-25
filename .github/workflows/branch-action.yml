@@ -1,0 +1,28 @@
+name: Create branch on issue assignment
+on:
+  workflow_call: #rende workflow riusabile
+
+jobs:
+  create_branch:
+    runs-on: self-hosted
+    # Non parte se manca la dicitura [] (il documento di riferimento della issue) nel titolo dell'issue 
+    if: contains(github.event.issue.title, '[') && contains(github.event.issue.title, ']')
+    steps:
+      - name: Create issue branch
+        uses: robvanderleek/create-issue-branch@main
+        env:
+          GITHUB_TOKEN: ${{ secrets.PROJECT_ACCESS_TOKEN }}
+        with:
+          configuration: |
+            {
+              "branchName": "${scope}-${issue.number}-${issue.title}",
+              "variables": [
+                {
+                  "name": "scope",
+                  "source": "title",
+                  "regex": "^\\[(.+?)\\].*",
+                  "defaultValue": "no-scope" 
+                }
+              ],
+              "silent": true
+            }
