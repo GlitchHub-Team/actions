@@ -1,5 +1,0 @@
-# Non usiamo più ${scope} perché l'Action non lo vede
-# Usiamo direttamente il titolo, che l'Action pulirà in automatico
-branchName: '#{issue.number}-${issue.title}'
-# Riduciamo al minimo la configurazione
-silent: false
