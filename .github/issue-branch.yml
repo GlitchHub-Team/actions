@@ -1,12 +1,3 @@
 # .github/issue-branch.yml
-branchName: '${issue.number}-${issue.title}'
-# Questa sezione dice all'action come pulire il titolo
-# Sostituiamo le parentesi e tutto ciò che non è alfanumerico con il vuoto
-variables:
-  - name: issue.title
-    source: issue.title
-    # Rimuoviamo le parentesi quadre e il loro contenuto per il titolo
-    # o semplicemente puliamo i caratteri speciali
-    regex: '\[?([^\]]+)\]?\s*(.*)'
-    replacement: '$1-$2'
+branchName: '${issue.number}${issue.title}'
 silent: true
