@@ -1,8 +1,7 @@
-branchName: '${scope}-${issue.number}-${issue.title}'
+branchName: 'config-read-${scope}-${issue.number}-${issue.title}'
 variables:
   - name: scope
     source: title
     # Questa regex cerca qualsiasi cosa dentro le quadre, ovunque siano nel titolo
-    regex: '\[(?<scope>.*?)\]' 
-    defaultValue: 'no-scope'
+    regex: '\[(.+?)\]' 
 silent: false # IMPORTANTE: mettilo a false per vedere il debug nei log
