@@ -1,6 +1,14 @@
+name: Create branch on issue assignment
+on:
+  workflow_call: #rende workflow riusabile
+
 jobs:
   create_branch:
     runs-on: self-hosted
+    permissions:
+      contents: write
+      issues: write
+      pull-requests: write
     outputs:
       extracted_scope: ${{ steps.regex.outputs.scope }}
     steps:
