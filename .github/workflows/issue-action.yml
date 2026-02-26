@@ -22,7 +22,6 @@ jobs:
     env:
       GH_TOKEN:       ${{ secrets.PROJECT_ACCESS_TOKEN }}
       REPO:           "${{ github.repository }}"
-      ISSUE_NUMBER:   "${{ github.event.issue.number }}"
       
     runs-on: self-hosted
     steps:
@@ -37,17 +36,23 @@ jobs:
           python-version: '3.13'
           cache: 'pip'
 
+      - name: Determine issue/PR number
+        run: |
+          ISSUE_NUM=${{ github.event.issue.number }}
+          PR_NUM=${{ github.event.issue.number }}
+          echo 'ELEMENT_NUMBER='${ISSUE_NUM:-$PR_NUM} >> $GITHUB_ENV
+
       - name: Install deps
         run: pip install -r ./issue-action/requirements.txt
 
       - name: Execute script (opened PR)
         if: inputs.issue-event == 'open-pr'
-        run: python ./issue-action ${{ inputs.project }} "$REPO/$ISSUE_NUMBER" --role --iteration --pr
+        run: python ./issue-action ${{ inputs.project }} "$REPO/$ELEMENT_NUMBER" --role --iteration --pr
 
       - name: Execute script (opened issue)
         if: inputs.issue-event == 'open'
-        run: python ./issue-action ${{ inputs.project }} "$REPO/$ISSUE_NUMBER" --role --iteration
+        run: python ./issue-action ${{ inputs.project }} "$REPO/$ELEMENT_NUMBER" --role --iteration
 
       - name: Execute script (labeled issue)
         if: inputs.issue-event == 'label'
-        run: python ./issue-action ${{ inputs.project }} "$REPO/$ISSUE_NUMBER" --role 
+        run: python ./issue-action ${{ inputs.project }} "$REPO/$ELEMENT_NUMBER" --role 
