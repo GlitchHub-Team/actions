@@ -11,7 +11,22 @@ jobs:
     runs-on: self-hosted
 
     steps:
-      - name: Create issue branch
+      - name: Parse issue
+        id: parse-issue
+        uses: onmax/issue-form-parser@main
+        with:
+          issue_number: ${{ github.event.issue.number }}
+          github_token: ${{ secrets.PROJECT_ACCESS_TOKEN }}
+
+      - name: Save parsed issue data
+        id: save-parsed-issue
+        run: |
+          PAYLOAD='${{ steps.parse-issue.outputs.payload }}'
+          echo 'NON_CREARE_BRANCH='$(echo "$PAYLOAD" | jq '."Issue Branch"."**NON** creare branch per questa issue"') >> $GITHUB_ENV
+    
+      - if: ${{ env.NON_CREARE_BRANCH == 'false' }}
+        name: Create issue branch
+        id: create-issue-branch
         uses: robvanderleek/create-issue-branch@main
         env:
           # Usiamo il segreto ricevuto
