@@ -16,12 +16,13 @@ permissions:
   contents: read  # non so se serva
   issues: write
   repository-projects: write
+  
 
 jobs:
   edit_issue:
     env:
-      GH_TOKEN:       ${{ secrets.PROJECT_ACCESS_TOKEN }}
-      REPO:           "${{ github.repository }}"
+      GH_TOKEN: ${{ secrets.PROJECT_ACCESS_TOKEN }}
+      REPO:     "${{ github.repository }}"
       
     runs-on: self-hosted
     steps:
@@ -39,7 +40,7 @@ jobs:
       - name: Determine issue/PR number
         run: |
           ISSUE_NUM=${{ github.event.issue.number }}
-          PR_NUM=${{ github.event.issue.number }}
+          PR_NUM=${{ github.event.pull_request.number }}
           echo 'ELEMENT_NUMBER='${ISSUE_NUM:-$PR_NUM} >> $GITHUB_ENV
 
       - name: Install deps
