@@ -18,8 +18,14 @@ jobs:
     #  run: apt-get install -y fontconfig
 
     - name: Move fonts
-      run: cp ${{ github.event.inputs.folder }}/* /usr/local/share/fonts/
-
+      run: |
+        if [[ -n "${{ github.event.inputs.folder}}" ]]; then
+          cp ./${{ github.event.inputs.folder }}/* ~/.local/share/fonts
+        else
+          echo "::error::Folder passato in input è vuoto"
+          exit 1
+        fi
+        
     - name: Rebuild fc-cache
       run: fc-cache -f -v
     
