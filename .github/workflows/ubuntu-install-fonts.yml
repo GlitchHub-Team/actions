@@ -1,0 +1,22 @@
+name: "Install fonts"
+on:
+  workflow_call:
+    inputs:
+      folder:
+        type: string
+        description: "Stringa che contiene path della cartella contenente tutti i font da installare, SENZA trailing slash"
+        required: true
+
+jobs:
+  install-font:
+    runs-on: self-hosted
+    steps:
+    - name: Install fontconfig
+      run: apt-get install -y fontconfig
+
+    - name: Move fonts
+      run: cp ${{ github.event.inputs.folder }}/* /usr/local/share/fonts/
+
+    - name: Rebuild fc-cache
+      run: fc-cache -f -v
+    
