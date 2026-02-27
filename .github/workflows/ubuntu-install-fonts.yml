@@ -14,8 +14,8 @@ jobs:
     - name: Checkout repository
       uses: actions/checkout@v4
     
-    - name: Install fontconfig
-      run: apt-get install -y fontconfig
+    # - name: Install fontconfig
+    #  run: apt-get install -y fontconfig
 
     - name: Move fonts
       run: cp ${{ github.event.inputs.folder }}/* /usr/local/share/fonts/
