@@ -11,6 +11,9 @@ jobs:
   install-font:
     runs-on: self-hosted
     steps:
+    - name: Checkout repository
+      uses: actions/checkout@v4
+    
     - name: Install fontconfig
       run: apt-get install -y fontconfig
 
