@@ -11,6 +11,9 @@ Workflow chiamati per una migliore gestione delle issue. Permette di associare i
 ## `branch-action.yml`
 Workflow chiamato per creare branch su creazione di issue.
 
+## `delete-issue-branches.yml`
+Workflow che elimina gli issue branch aperti legati a issue chiuse.
+
 ### Setup
 Per far funzionare questa automation nella repository è fondamentale che sia stabilito un _issue form_ che abbia un campo
 checkbox `"Issue Branch"` con una checkbox chiamata `"**NON** creare branch per questa issue"`.

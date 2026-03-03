@@ -1,0 +1,32 @@
+name: Delete Old Issue Branches
+on:
+  workflow_call:
+
+permissions:
+  contents: write
+  issues: read
+
+
+jobs:
+  delete_issue_branch:
+    runs-on: self-hosted
+    
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v6
+        with:
+          repository: GlitchHub-Team/actions
+
+      - name: Setup Python
+        uses: actions/setup-python@v6
+        with:
+          python-version: '3.13'
+          cache: 'pip'
+
+      - name: Install deps
+        run: pip install -r ./delete-issue-branches/requirements.txt
+
+      - name: Delete old issue branches
+        run: |
+          python ./delete-issue-branches ${{ github.repository }}
+          
