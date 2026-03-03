@@ -48,12 +48,12 @@ jobs:
 
       - name: Execute script (opened PR)
         if: inputs.issue-event == 'open-pr'
-        run: python ./issue-action ${{ inputs.project }} "$REPO/$ELEMENT_NUMBER" --role --iteration --pr
+        run: python ./issue-action ${{ inputs.project }} "$REPO/$ELEMENT_NUMBER" --role --iteration --pr --link-issue
 
       - name: Execute script (opened issue)
         if: inputs.issue-event == 'open'
-        run: python ./issue-action ${{ inputs.project }} "$REPO/$ELEMENT_NUMBER" --role --iteration
+        run: python ./issue-action ${{ inputs.project }} "$REPO/$ELEMENT_NUMBER" --role --iteration --set-parent
 
       - name: Execute script (labeled issue)
         if: inputs.issue-event == 'label'
-        run: python ./issue-action ${{ inputs.project }} "$REPO/$ELEMENT_NUMBER" --role 
+        run: python ./issue-action ${{ inputs.project }} "$REPO/$ELEMENT_NUMBER" --role

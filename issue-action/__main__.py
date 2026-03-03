@@ -1,9 +1,12 @@
 import argparse
 import jq
+import re
 
-from issue import get_issue_data
-from pr import get_pr_data
+from issue import get_issue_data, get_parent_issue_from_title, set_parent_issue
+from pr import get_pr_data, link_issue_with_comment
 from project import get_project_data, set_sprint_iteration, set_sprint_role, add_to_project
+
+from const import ISSUE_BRANCH_PREFIX, ISSUE_BRANCH_GET_NUMBER_REGEX
 
 def main():
     parser = argparse.ArgumentParser(
@@ -34,9 +37,21 @@ def main():
     )
 
     parser.add_argument(
+        "--set-parent",
+        action="store_true",
+        help="Imposta la parent issue leggendo il titolo dell'issue. Ignorato se il parametro --pr è impostato."
+    )
+
+    parser.add_argument(
         "--pr",
         action="store_true",
         help="Da usare se i dati inseriti sono relativi a una PR e non una Issue"
+    )
+
+    parser.add_argument(
+        "--link-issue",
+        action="store_true",
+        help="Se parametro --pr è impostato, allora crea link dalla PR a relativa issue"
     )
 
     args = parser.parse_args()
@@ -62,10 +77,11 @@ def main():
         sprint_role_option_ids
     ) = get_project_data(project_organization, project_number)
 
+    # Se è una PR:
     if args.pr:
         print("[PROCEDURA PR]")
         print("get_pr_data...")
-        pr_node_id = get_pr_data(repo_owner, repo_name, issue_or_pr_number)
+        pr_node_id, ref_name, comments = get_pr_data(repo_owner, repo_name, issue_or_pr_number)
         
         print("add_to_project...")
         item_id = add_to_project(project_id, pr_node_id)
@@ -87,15 +103,36 @@ def main():
                 sprint_role_field_id,
                 sprint_role_option_ids["Verificatore"],
             )
+        
+        if args.link_issue:
+            print("link_issue_with_comment...")
+            if ref_name.startswith(ISSUE_BRANCH_PREFIX):
+                issue_number = int(re.findall(ISSUE_BRANCH_GET_NUMBER_REGEX, ref_name)[0])
+                link_issue_with_comment(comments, pr_node_id, issue_number)
+            else:
+                print(f"  -> issue branch not found")
 
+    # Se è un'issue:
     else:
         print("[PROCEDURA ISSUE]")
         print("get_issue_data...")
-        sprint_role_option_id, issue_node_id = get_issue_data(repo_owner, repo_name, issue_or_pr_number, sprint_role_option_ids)
+        sprint_role_option_id, issue_node_id, issue_title = get_issue_data(repo_owner, repo_name, issue_or_pr_number, sprint_role_option_ids)
 
         print("add_to_project...")
         item_id = add_to_project(project_id, issue_node_id)
         
+        if args.set_parent:
+            print("get_parent_issue_from_title...")
+            parent_issue = get_parent_issue_from_title(issue_title)
+            if parent_issue:
+                print(f"  -> parent_issue: #{parent_issue}")
+                print("get_issue_data (parent issue)...")
+                _, parent_issue_node_id, _ = get_issue_data(*parent_issue, {})
+                
+                print("set_parent_issue...")
+                set_parent_issue(issue_node_id, parent_issue_node_id)
+
+
         if args.iteration:
             print("set_sprint_iteration...")
             set_sprint_iteration(

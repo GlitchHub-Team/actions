@@ -1,3 +1,7 @@
+"""
+Tutte le funzioni relative alla modifica del GitHub Project
+"""
+
 import jq
 
 from gh_api import request_api
