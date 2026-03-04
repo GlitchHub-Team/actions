@@ -67,5 +67,7 @@ def set_parent_issue(
         issueId: "{parent_issue_node_id}"
         subIssueId: "{issue_node_id}"
         replaceParent: false
-    }})
+    }}) {{
+        clientMutationId
+    }}
     }}""")
