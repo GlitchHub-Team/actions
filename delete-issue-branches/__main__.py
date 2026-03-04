@@ -35,7 +35,7 @@ def main():
 
     args = parser.parse_args()
 
-    if not args.pr_to_close:
+    if not args.pr_ref:
         print("::error::Numero PR invalido")
         exit(1)
 
@@ -60,12 +60,12 @@ def main():
 
     print("::notice::Eliminazione issue branch corrente...")
     try:
-        issue = repo.get_issue(args.pr_to_close)
+        issue = repo.get_issue(args.pr_ref)
         if issue.state == "closed":
-            delete_branch(repo, f"issue-{args.pr_to_close}")
+            delete_branch(repo, f"issue-{args.pr_ref}")
 
     except UnknownObjectException:
-        print(f"::warning::Branch 'issue-{args.pr_to_close}' non trovato")
+        print(f"::warning::Branch 'issue-{args.pr_ref}' non trovato")
 
 
 if __name__ == "__main__":
