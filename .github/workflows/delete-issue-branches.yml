@@ -10,6 +10,9 @@ jobs:
   delete_issue_branch:
     runs-on: self-hosted
     
+    env:
+      GH_TOKEN: ${{ secrets.PROJECT_ACCESS_TOKEN }}
+    
     steps:
       - name: Checkout repository
         uses: actions/checkout@v6
