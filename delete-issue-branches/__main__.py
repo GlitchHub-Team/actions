@@ -28,9 +28,9 @@ def main():
     )
 
     parser.add_argument(
-        "pr_to_close",
+        "pr_ref",
         type=int,
-        help="Numero PR di cui eliminare Issue Branch oltre a PR vecchie"
+        help="Gitref della PR da eliminare oltre a PR vecchie"
     )
 
     args = parser.parse_args()
