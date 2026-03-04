@@ -3,7 +3,7 @@ import jq
 import re
 
 from issue import get_issue_data, get_parent_issue_from_title, set_parent_issue
-from pr import get_pr_data, link_issue_with_comment
+from pr import get_pr_data, link_issue
 from project import get_project_data, set_sprint_iteration, set_sprint_role, add_to_project
 
 from const import ISSUE_BRANCH_PREFIX, ISSUE_BRANCH_GET_NUMBER_REGEX
@@ -81,7 +81,7 @@ def main():
     if args.pr:
         print("[PROCEDURA PR]")
         print("get_pr_data...")
-        pr_node_id, ref_name, comments = get_pr_data(repo_owner, repo_name, issue_or_pr_number)
+        pr_node_id, ref_name, pr_body = get_pr_data(repo_owner, repo_name, issue_or_pr_number)
         
         print("add_to_project...")
         item_id = add_to_project(project_id, pr_node_id)
@@ -108,7 +108,7 @@ def main():
             print("link_issue_with_comment...")
             if ref_name.startswith(ISSUE_BRANCH_PREFIX):
                 issue_number = int(re.findall(ISSUE_BRANCH_GET_NUMBER_REGEX, ref_name)[0])
-                link_issue_with_comment(comments, pr_node_id, issue_number)
+                link_issue(pr_body, pr_node_id, issue_number)
             else:
                 print(f"  -> issue branch not found")
 

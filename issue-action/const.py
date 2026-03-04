@@ -24,7 +24,7 @@ class JqStrings:
 
     GET_ISSUE_TITLE = '.data.repository.issue.title'
     GET_PR_REF_NAME = '.data.repository.pullRequest.headRefName'
-    GET_PR_COMMENTS = '.data.repository.pullRequest.comments.nodes'
+    GET_PR_COMMENTS = '.data.repository.pullRequest.body'
 
 RoleStr: TypeAlias = Literal["Responsabile", "Amministratore", "Analista", "Verificatore", "Programmatore", "Progettista"]
 
