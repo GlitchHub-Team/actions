@@ -9,7 +9,7 @@ permissions:
 jobs:
   delete_issue_branch:
     runs-on: self-hosted
-    
+
     env:
       GH_TOKEN: ${{ secrets.PROJECT_ACCESS_TOKEN }}
     
@@ -30,5 +30,5 @@ jobs:
 
       - name: Delete old issue branches
         run: |
-          python ./delete-issue-branches ${{ github.repository }}
+          python ./delete-issue-branches ${{ github.repository }} ${{ github.event.issue.number }}
           

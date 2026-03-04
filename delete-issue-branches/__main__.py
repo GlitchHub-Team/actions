@@ -27,12 +27,23 @@ def main():
         help="Nome della repository nella forma REPO_OWNER/REPO_NAME"
     )
 
+    parser.add_argument(
+        "pr_to_close",
+        type=int,
+        help="Numero PR di cui eliminare Issue Branch oltre a PR vecchie"
+    )
+
     args = parser.parse_args()
+
+    if not args.pr_to_close:
+        print("::error::Numero PR invalido")
+        exit(1)
 
     repo = GH.get_repo(args.repo)
 
     issue_branches: dict[int, Branch.Branch] = {}
 
+    print("::notice::Eliminazione issue branch vecchi...")
     for branch in repo.get_branches():
         if (match := re.findall(r"^issue-(\d+)$", branch.name)):
             issue_num = int(match[0])
@@ -47,7 +58,14 @@ def main():
         except UnknownObjectException:
             print(f"::warning::Trovato branch {branch.name} ma non issue #{issue_number}")
 
+    print("::notice::Eliminazione issue branch corrente...")
+    try:
+        issue = repo.get_issue(args.pr_to_close)
+        if issue.state == "closed":
+            delete_branch(repo, f"issue-{args.pr_to_close}")
 
+    except UnknownObjectException:
+        print(f"::warning::Branch 'issue-{args.pr_to_close}' non trovato")
 
 
 if __name__ == "__main__":
