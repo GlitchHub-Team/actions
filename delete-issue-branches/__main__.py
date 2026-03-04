@@ -29,7 +29,7 @@ def main():
 
     parser.add_argument(
         "pr_ref",
-        type=int,
+        type=str,
         help="Gitref della PR da eliminare oltre a PR vecchie"
     )
 
