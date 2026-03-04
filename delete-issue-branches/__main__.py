@@ -60,12 +60,11 @@ def main():
 
     print("::notice::Eliminazione issue branch corrente...")
     try:
-        issue = repo.get_issue(args.pr_ref)
-        if issue.state == "closed":
-            delete_branch(repo, f"issue-{args.pr_ref}")
+        if args.pr_ref.startswith("issue-"):
+            delete_branch(repo, args.pr_ref)
 
     except UnknownObjectException:
-        print(f"::warning::Branch 'issue-{args.pr_ref}' non trovato")
+        print(f"::warning::Branch '{args.pr_ref}' non trovato")
 
 
 if __name__ == "__main__":
