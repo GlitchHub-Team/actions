@@ -61,7 +61,7 @@ def main():
     print("::notice::Eliminazione issue branch corrente...")
     try:
         if args.pr_ref.startswith("issue-"):
-            delete_branch(repo, args.pr_ref)
+            delete_branch(repo, f"origin/{args.pr_ref}")
 
     except UnknownObjectException:
         print(f"::warning::Branch '{args.pr_ref}' non trovato")
