@@ -15,7 +15,7 @@ def request_api(query: str, error_blocking: bool = True) -> dict:
         response = request.json()
 
         if error_blocking and (errors := response.get('errors')):
-            print("ERRORE GraphQL:")
+            print("::error::ERRORE GraphQL:")
             pprint(errors)
             exit(1)
 

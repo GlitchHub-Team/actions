@@ -79,15 +79,15 @@ def main():
 
     # Se è una PR:
     if args.pr:
-        print("[PROCEDURA PR]")
-        print("get_pr_data...")
+        print("::notice::[PROCEDURA PR]")
+        print("::notice::get_pr_data...")
         pr_node_id, ref_name, pr_body = get_pr_data(repo_owner, repo_name, issue_or_pr_number)
         
-        print("add_to_project...")
+        print("::notice::add_to_project...")
         item_id = add_to_project(project_id, pr_node_id)
 
         if args.iteration:
-            print("set_sprint_iteration...")
+            print("::notice::set_sprint_iteration...")
             set_sprint_iteration(
                 project_id,
                 item_id,
@@ -96,7 +96,7 @@ def main():
             )
 
         if args.role:
-            print("set_sprint_role... (verificatore)")
+            print("::notice::set_sprint_role... (verificatore)")
             set_sprint_role(
                 project_id,
                 item_id,
@@ -105,20 +105,20 @@ def main():
             )
         
         if args.link_issue:
-            print("link_issue_with_comment...")
+            print("::notice::link_issue_with_comment...")
             if ref_name.startswith(ISSUE_BRANCH_PREFIX):
                 issue_number = int(re.findall(ISSUE_BRANCH_GET_NUMBER_REGEX, ref_name)[0])
                 link_issue(pr_body, pr_node_id, issue_number)
             else:
-                print(f"  -> issue branch not found")
+                print(f"::notice::  -> issue branch not found")
 
     # Se è un'issue:
     else:
-        print("[PROCEDURA ISSUE]")
-        print("get_issue_data...")
+        print("::notice::[PROCEDURA ISSUE]")
+        print("::notice::get_issue_data...")
         sprint_role_option_id, issue_node_id, issue_title = get_issue_data(repo_owner, repo_name, issue_or_pr_number, sprint_role_option_ids)
 
-        print("add_to_project...")
+        print("::notice::add_to_project...")
         item_id = add_to_project(project_id, issue_node_id)
         
         if args.set_parent:
@@ -130,11 +130,13 @@ def main():
                 _, parent_issue_node_id, _ = get_issue_data(*parent_issue, {})
                 
                 print("set_parent_issue...")
-                set_parent_issue(issue_node_id, parent_issue_node_id)
-
+                try:
+                    set_parent_issue(issue_node_id, parent_issue_node_id)
+                except:
+                    print("::warning::La issue ha già un parent")
 
         if args.iteration:
-            print("set_sprint_iteration...")
+            print("::notice::set_sprint_iteration...")
             set_sprint_iteration(
                 project_id,
                 item_id,
@@ -143,7 +145,7 @@ def main():
             )
 
         if args.role:
-            print("set_sprint_role...")
+            print("::notice::set_sprint_role...")
             set_sprint_role(
                 project_id,
                 item_id,
@@ -151,7 +153,7 @@ def main():
                 sprint_role_option_id,
             )
 
-        print("Script eseguito con successo")
+        print("::notice::Script eseguito con successo!")
 
 
 if __name__ == "__main__":
