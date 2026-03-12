@@ -3,6 +3,7 @@ Tutte le funzioni relative alle Pull Request
 """
 
 import jq
+import json
 
 from gh_api import request_api
 from const import ROLES, JqStrings
@@ -39,12 +40,12 @@ def link_issue(
         print(f"  -> close message already present")
         return
 
-    new_body = fr"{previous_body.strip('"')}\n\ncloses #{issue_number}"
+    new_body = json.dumps(previous_body + f"\n\ncloses #{issue_number}", ensure_ascii=False)
 
     request_api(f"""mutation {{
         updatePullRequest(input: {{
             pullRequestId: "{pr_node_id}"
-            body: "{new_body}"
+            body: {new_body}
         }}) {{
             clientMutationId
         }}
